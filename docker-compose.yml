@@ -1,0 +1,16 @@
+services:
+  postgres:
+    container_name: task_manager_postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: iliass
+      POSTGRES_PASSWORD: iliass
+      POSTGRES_DB: task_manager_db
+    ports:
+      - "5433:5432"
+    networks:
+      - task_manager_net
+
+networks:
+  task_manager_net:
+    driver: bridge
