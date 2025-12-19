@@ -9,6 +9,7 @@ import net.ayad.manageprojectbackend.entity.User;
 import net.ayad.manageprojectbackend.exception.EmailTakenException;
 import net.ayad.manageprojectbackend.mapper.UserMapper;
 import net.ayad.manageprojectbackend.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO createUser(CreateUserDTO createUserDTO) {
         User user = userMapper.toUser(createUserDTO);
+        user.setPassword(passwordEncoder.encode(createUserDTO.password()));
         if (isEmailTaken(user.getEmail())) {
             throw new EmailTakenException(createUserDTO.email());
         }
