@@ -21,11 +21,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponseDTO createUser(CreateUserDTO createUserDTO) {
-        User user = userMapper.toUser(createUserDTO);
-        user.setPassword(passwordEncoder.encode(createUserDTO.password()));
-        if (isEmailTaken(user.getEmail())) {
+        if (isEmailTaken(createUserDTO.email())) {
             throw new EmailTakenException(createUserDTO.email());
         }
+        User user = userMapper.toUser(createUserDTO);
+        user.setPassword(passwordEncoder.encode(createUserDTO.password()));
         User savedUser = userRepository.save(user);
         return userMapper.toUserResponseDTO(savedUser);
     }
