@@ -39,7 +39,7 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new TaskNotFoundException(taskId));
 
-        Project project = projectRepository.findByIdAndOwnerId(
+        projectRepository.findByIdAndOwnerId(
                 task.getProject().getId(),
                 authService.getCurrentUser().getId()
         ).orElseThrow(() -> new ProjectNotFoundException(task.getProject().getId()));
@@ -62,7 +62,7 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        Project project = projectRepository.findByIdAndOwnerId(
+        projectRepository.findByIdAndOwnerId(
                 existingTask.getProject().getId(),
                 authService.getCurrentUser().getId()
         ).orElseThrow(() -> new ProjectNotFoundException(existingTask.getProject().getId()));
@@ -77,7 +77,7 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        Project project = projectRepository.findByIdAndOwnerId(
+        projectRepository.findByIdAndOwnerId(
                 existingTask.getProject().getId(),
                 authService.getCurrentUser().getId()
         ).orElseThrow(() -> new ProjectNotFoundException(existingTask.getProject().getId()));
@@ -90,7 +90,7 @@ public class TaskService {
         Task existingTask = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
 
-        Project project = projectRepository.findByIdAndOwnerId(
+        projectRepository.findByIdAndOwnerId(
                 existingTask.getProject().getId(),
                 authService.getCurrentUser().getId()
         ).orElseThrow(() -> new ProjectNotFoundException(existingTask.getProject().getId()));

@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import net.ayad.manageprojectbackend.service.AuthService;
 import net.ayad.manageprojectbackend.service.CustomUserDetailsService;
 import net.ayad.manageprojectbackend.utility.JWTUtility;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

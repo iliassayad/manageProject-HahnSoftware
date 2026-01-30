@@ -11,7 +11,7 @@ import java.util.Date;
 @Component
 public class JWTUtility {
 
-    private final String secret = "rajamaroc2049EnsamCasablancaEstFesEstOujdaMasterBigData&IoT";
+    private final static String secret = "rajamaroc2049EnsamCasablancaEstFesEstOujdaMasterBigData&IoT";
     private final SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes());
 
     public String generateToken(String email) {

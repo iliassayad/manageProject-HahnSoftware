@@ -57,10 +57,4 @@ public class ProjectService {
         projectRepository.delete(existingProject);
     }
 
-
-//    private User getCurrentUser() {
-//        Long userId = authService.getCurrentUserId();
-//        return userRepository.findById(userId)
-//                .orElseThrow(() -> new UserNotFoundException(userId));
-//    }
 }

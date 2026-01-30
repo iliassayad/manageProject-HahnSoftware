@@ -154,7 +154,7 @@
                     <configLocation>google_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failOnViolation>false</failOnViolation>
-                    <linkXRef>false</linkXRef>
+                    <linkXRef>true</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
