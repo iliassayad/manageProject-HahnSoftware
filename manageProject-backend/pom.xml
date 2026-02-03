@@ -167,5 +167,11 @@
         </plugins>
 
     </build>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://nexus:8081/repository/test/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
