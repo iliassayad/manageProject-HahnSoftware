@@ -2,6 +2,7 @@ package net.ayad.manageprojectbackend.service;
 
 import net.ayad.manageprojectbackend.entity.User;
 import net.ayad.manageprojectbackend.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,20 @@ class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
 
+    private User user;
+
+    @BeforeEach
+    void setUp() {
+        user = new User(
+                1L,
+                "exemple@gmail.com",
+                "password123",
+                "John",
+                "Doe",
+                null
+        );
+    }
+
 
     @Nested
     @DisplayName("getCurrentUserId Tests")
@@ -49,10 +64,6 @@ class AuthServiceTest {
             SecurityContext securityContext = Mockito.mock(SecurityContext.class);
             Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
 
-            User user = new User();
-            user.setId(1L);
-            user.setEmail(email);
-
             Mockito.when(userRepository.findByEmail(email))
                     .thenReturn(Optional.of(user));
 
@@ -69,6 +80,44 @@ class AuthServiceTest {
                 // THEN
                 assertEquals(1L, result);
             }
+        }
+
+
+    }
+
+
+    @Nested
+    @DisplayName("getCurrentUser Tests")
+    class GetCurrentUser {
+
+        @Test
+        void whenUserExists_thenReturnUser() {
+            //Arrange
+            String email = "exemple@gmail.com";
+            UserDetails userDetails = mock(UserDetails.class);
+            when(userDetails.getUsername()).thenReturn(email);
+
+            Authentication authentication = mock(Authentication.class);
+            when(authentication.getPrincipal()).thenReturn(userDetails);
+
+            SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+            Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+
+            Mockito.when(userRepository.findByEmail(email))
+                    .thenReturn(Optional.of(user));
+            Mockito.when(userRepository.findById(1L))
+                    .thenReturn(Optional.of(user));
+            //Act
+            try (MockedStatic<SecurityContextHolder> mockedStatic =
+                         Mockito.mockStatic(SecurityContextHolder.class)) {
+                mockedStatic.when(SecurityContextHolder::getContext)
+                        .thenReturn(securityContext);
+                // WHEN
+                User result = authService.getCurrentUser();
+                // THEN
+                assertEquals(user, result);
+            }
+
         }
 
     }
