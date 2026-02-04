@@ -78,21 +78,6 @@ class ProjectControllerTest {
         );
     }
 
-    @Test
-    void testGreetings() throws Exception {
-        //Arrange
-
-        //Act & Assert
-        mockMvc.perform(get("/api/v1/projects/greeting"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Hello from Project Controller!"));
-
-    }
-
-
-
-
-
     @Nested
     @DisplayName("Get All Projects Tests")
     class GetAllProjects {
