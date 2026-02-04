@@ -4,6 +4,7 @@ package net.ayad.manageprojectbackend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.ayad.manageprojectbackend.dto.CreateProjectDTO;
 import net.ayad.manageprojectbackend.dto.ProjectResponseDTO;
+import net.ayad.manageprojectbackend.dto.UpdateProjectDTO;
 import net.ayad.manageprojectbackend.service.CustomUserDetailsService;
 import net.ayad.manageprojectbackend.service.ProjectService;
 import net.ayad.manageprojectbackend.utility.JWTUtility;
@@ -50,6 +51,8 @@ class ProjectControllerTest {
 
     CreateProjectDTO createProjectDTO;
 
+    UpdateProjectDTO updateProjectDTO;
+
 
     @BeforeEach
     void setup() {
@@ -75,6 +78,11 @@ class ProjectControllerTest {
         createProjectDTO = new CreateProjectDTO(
                 "New Project",
                 "New Project Description"
+        );
+
+        updateProjectDTO = new UpdateProjectDTO(
+                "Updated Project Title",
+                "Updated Project Description"
         );
     }
 
@@ -160,6 +168,27 @@ class ProjectControllerTest {
             verify(projectService).deleteProject(projectId);
         }
 
+    }
+
+    @Nested
+    @DisplayName("Update Project Tests")
+    class UpdateProjectTests {
+        @Test
+        void testUpdateProject_whenValidInput_thenReturnUpdatedProject() throws Exception {
+            //Arrange
+            Long projectId = 1L;
+            when(projectService.updateProject(projectId, updateProjectDTO)).thenReturn(project1);
+
+
+            //Act & Assert
+            mockMvc.perform(put("/api/v1/projects/{id}", projectId)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(updateProjectDTO)))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.id").value(1L))
+                    .andExpect(jsonPath("$.title").value("Project Title"));
+        }
     }
 
 
