@@ -13,21 +13,26 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-@WebMvcTest(ProjectController.class)
+@WebMvcTest(controllers = ProjectController.class,
+        excludeAutoConfiguration = SecurityAutoConfiguration.class
+)
 @AutoConfigureMockMvc(addFilters = false)
 class ProjectControllerTest {
 
@@ -139,13 +144,23 @@ class ProjectControllerTest {
             //Arrange
             when(projectService.createProject(createProjectDTO)).thenReturn(project1);
 
-            //Act & Assert
-            mockMvc.perform(post("/api/v1/projects")
+            //Act
+             MvcResult result = mockMvc.perform(post("/api/v1/projects")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(createProjectDTO)))
-                    .andExpect(status().isCreated())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.id").value(1));
+                    .andReturn();
+
+            //Assert
+
+            assertEquals(201, result.getResponse().getStatus());
+            assertEquals(MediaType.APPLICATION_JSON_VALUE, result.getResponse().getContentType());
+            String responseBody = result.getResponse().getContentAsString();
+            ProjectResponseDTO returnedProject = objectMapper.readValue(responseBody, ProjectResponseDTO.class);
+            assertEquals(1L, returnedProject.id());
+            assertEquals("Project Title", returnedProject.title());
+
+
+
 
 
         }
